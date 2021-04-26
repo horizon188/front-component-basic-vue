@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>uploade</title>
+  <style>
+
+  </style>
+  <script>
+    function updateSize() {
+    }
+  </script>
+  <style>
+    #dropbox {
+      width: 200px;
+      height: 200px;
+      background-color: red;
+    }
+
+    #preview {
+      width: 100%;
+      height: 800px;
+    }
+  </style>
+</head>
+
+<body onload="updateSize()">
+  <div id="dropbox">
+    <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+  </div>
+  <div id="preview">
+
+  </div>
+  <script>
+    let dropbox;
+    dropbox = document.getElementById("dropbox");
+    preview = document.getElementById("preview");
+    fileElem = document.getElementById("fileElem");
+    dropbox.addEventListener("dragenter", dragenter, false);
+    dropbox.addEventListener("dragover", dragover, false);
+    dropbox.addEventListener("drop", drop, false);
+
+    dropbox.addEventListener("click", function (e) {
+      if (fileElem) {
+        fileElem.click();
+      }
+    }, false);
+    function dragenter(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    function dragover(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    function drop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var dt = e.dataTransfer;
+      var files = dt.files;
+
+      handleFiles(files);
+    }
+    function handleFiles(files) {
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var imageType = /^image\//;
+
+        if (!imageType.test(file.type)) {
+          continue;
+        }
+
+        var img = document.createElement("img");
+        img.classList.add("obj");
+        img.file = file;
+        preview.appendChild(img); // 假设"preview"就是用来显示内容的div
+
+        var reader = new FileReader();
+        reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+        reader.readAsDataURL(file);
+      }
+    }
+
+  </script>
+</body>
+
+</html>
